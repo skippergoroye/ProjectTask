@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import { UserInstance } from "../models/userModel";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { v4 as uuid } from "uuid";
-import { GeneratePassword, GenerateSalt, GenerateSignature, loginSchema, option, registerSchema } from "../utils/validation";
+import { GeneratePassword, GenerateSalt, GenerateSignature, loginSchema, option, registerSchema, updateSchema } from "../utils/validation";
 import { UserAttributes } from "../interface/UserAttributes";
 import bcrypt from 'bcrypt';
-
-
 
 
 
@@ -52,22 +51,22 @@ export const Register = async (req: Request, res: Response) => {
         })
 
 
-      const User = (await UserInstance.findOne({
-        where: { email: email },
-      })) 
+        const User = (await UserInstance.findOne({
+          where: { email: email },
+        })) as unknown as UserAttributes; 
 
-    //   let signature = await GenerateSignature({
-    //     id: user.id,
-    //     email: user.email,
-    //     verified: user.verified,
-    //   });
 
-    //   return res.status(201).json({
-    //     message:
-    //       "User created successfully check your email or phone for OTP verification",
-    //     signature,
-    //     verified: User.verified,
-    //   });   
+
+      let signature = await GenerateSignature({
+        id: User.id,
+        email: User.email,
+      });
+
+      return res.status(201).json({
+        message: "User created successfully check your email or phone for OTP verification",
+        signature,
+        User
+      });   
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -130,11 +129,58 @@ export const Login = async (req: Request, res: Response) => {
 
 
 
+
+
+
+  export const updateUserProfile = async (req: JwtPayload, res: Response) => {
+    try {
+      const id = req.user.id;
+      const { firstName, lastName, address, phone } = req.body;
+    
+      const validateResult = updateSchema.validate(req.body, option);
+      if (validateResult.error) {
+        return res.status(400).json({
+          Error: validateResult.error.details[0].message,
+        });
+      }
   
-
-
-
-
-  export const updateUserProfile = async (req: Request, res: Response) => {
-
-  }
+      // check if the user is a registered user
+      const User = (await UserInstance.findOne({
+        where: { id: id },
+      })) as unknown as UserAttributes;
+  
+      if (!User) {
+        return res.status(400).json({
+          Error: "You are not authorised to update your profile",
+        });
+      }
+  
+      const updatedUser = (await UserInstance.update(
+        {
+          firstName,
+          lastName,
+          address,
+          phone,
+        },
+        { where: { id: id } }
+      )) as unknown as UserAttributes;
+  
+      if (updatedUser) {
+        const User = (await UserInstance.findOne({
+          where: { id: id },
+        })) as unknown as UserAttributes;
+        return res.status(200).json({
+          message: "You have successfully updated your profile",
+          User,
+        });
+      }
+      return res.status(400).json({
+        message: "Error occured",
+      });
+    } catch (err) {
+      return res.status(500).json({
+        Error: "Internal server Error",
+        route: "/users/update-profile",
+      });
+    }
+  };

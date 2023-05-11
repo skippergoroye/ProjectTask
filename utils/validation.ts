@@ -2,10 +2,8 @@ import bcrypt from 'bcrypt';
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import Joi from 'joi/lib';
 import { AuthPayLoad } from '../interface/Auth.dt.o';
-export const APP_SECRET = process.env.APP_SECRET as string
+import {APP_SECRET} from '../config';
 
-// import {APP_SECRET} from '../config';
-// import { AuthPayLoad } from '../interface';
 
 
 export const option = {

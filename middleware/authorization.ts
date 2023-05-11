@@ -5,7 +5,7 @@ import { APP_SECRET } from '../config';
 import { UserAttributes } from '../interface/UserAttributes';
 
 
-export const auth = async(req: JwtPayload, res: Response, next: NextFunction)=> {
+export const userAuth = async(req: JwtPayload, res: Response, next: NextFunction)=> {
     try {
         const authorization = req.headers.authorization
 

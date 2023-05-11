@@ -1,5 +1,5 @@
 import express from "express";
-import { auth } from "../middleware/authorization";
+import { userAuth } from "../middleware/authorization";
 import {
     Login,
     Register,
@@ -10,8 +10,8 @@ import {
 
 const router = express.Router();
 
-router.post("/signup", Register);
+router.post("/register", Register);
 router.post("/login", Login);
-router.patch("/update-profile", auth, updateUserProfile);
+router.patch("/update-profile", userAuth, updateUserProfile);
 
 export default router;
