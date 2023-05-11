@@ -7,10 +7,5 @@ export interface UserAttributes {
     salt: string;
     address: string;
     phone: string;
-    otp: number;
-    otp_expiry: Date;
-    lng: number;
-    lat: number;
-    verified: boolean;
     role: string;
 }

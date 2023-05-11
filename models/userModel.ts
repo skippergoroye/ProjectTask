@@ -58,6 +58,7 @@ UserInstance.init({
     phone: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
             notNull: {
                 msg: "phone number is required"
@@ -66,47 +67,6 @@ UserInstance.init({
                 msg: "provide a phone number"
             },
         }
-    },
-    otp: {
-        type: DataTypes.NUMBER,
-        allowNull: false,
-        validate: {
-            notNull: {
-                msg: "otp is required"
-            },
-            notEmpty: {
-                msg: "provide an otp"
-            },
-        }
-    },
-    otp_expiry: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        validate: {
-            notNull: {
-                msg: "Otp expired"
-            },
-        }
-    },
-    lng: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    lat: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    verified:{
-        type:DataTypes.BOOLEAN,
-        allowNull:false,
-        validate: {
-            notNull: {
-              msg: "User must must be verified",
-            },
-            notEmpty: {
-                msg: "user not verified",
-              },
-          }
     },
     role: {
       type: DataTypes.STRING,
