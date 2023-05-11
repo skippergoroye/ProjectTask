@@ -47,6 +47,20 @@ export const updateSchema = Joi.object().keys({
 
 
 
+export const adminSchema = Joi.object().keys({
+  email: Joi.string().required(),
+  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),  
+  confirm_password: Joi.any()
+      .equal(Joi.ref("password"))
+      .required()
+      .label("Confirm password")
+      .messages({ "any.only": "{{#label}} does not match" }),
+});
+
+
+
+
+
 
 
 export const GenerateSalt = async()=>{

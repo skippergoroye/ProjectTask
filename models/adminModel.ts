@@ -1,13 +1,23 @@
 import { DataTypes, Model } from 'sequelize';
 import {sequelizeDB} from '../Database/index';
-import { UserAttributes } from '../interface/UserAttributes';
 
 
 
-export class UserInstance extends Model<UserAttributes> {}
+
+export interface AdminAttributes {
+    id: string;
+    email: string;
+    password: string;
+    salt: string;
+    role: string;
+}
 
 
-UserInstance.init({
+
+export class AdminInstance extends Model<AdminAttributes> {}
+
+
+AdminInstance.init({
     id: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -39,34 +49,9 @@ UserInstance.init({
             },
         }
     },
-    firstName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    lastName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
     salt: {
         type: DataTypes.STRING,
         allowNull: true,
-    },
-    address: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-            notNull: {
-                msg: "phone number is required"
-            },
-            notEmpty: {
-                msg: "provide a phone number"
-            },
-        }
     },
     role: {
       type: DataTypes.STRING,
@@ -75,7 +60,7 @@ UserInstance.init({
 },
 { 
     sequelize: sequelizeDB,
-    tableName: 'user',
+    tableName: 'admin',
     timestamps: true
 });
 

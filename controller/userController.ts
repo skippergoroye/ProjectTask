@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { UserInstance } from "../models/userModel";
+import { UserAttributes, UserInstance } from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { v4 as uuid } from "uuid";
 import { GeneratePassword, GenerateSalt, GenerateSignature, loginSchema, option, registerSchema, updateSchema } from "../utils/validation";
-import { UserAttributes } from "../interface/UserAttributes";
 import bcrypt from 'bcrypt';
 
 
@@ -31,7 +30,7 @@ export const Register = async (req: Request, res: Response) => {
         const phoneNumber = await UserInstance.findOne({ where: {phone : phone}})
 
         if(phoneNumber) {
-            return res.status(400).json({ message : "Email already exist please login"})
+            return res.status(400).json({ message : "Phone number already exist please login"})
         }
 
 
@@ -60,6 +59,7 @@ export const Register = async (req: Request, res: Response) => {
       let signature = await GenerateSignature({
         id: User.id,
         email: User.email,
+        role: User.role
       });
 
       return res.status(201).json({
@@ -106,6 +106,7 @@ export const Login = async (req: Request, res: Response) => {
           let signature = await GenerateSignature({
             id: User.id,
             email: User.email,
+            role: User.role
           });
   
           return res.status(200).json({

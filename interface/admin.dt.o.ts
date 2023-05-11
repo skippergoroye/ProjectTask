@@ -1,4 +1,4 @@
-export interface AuthPayLoad{
+export interface AdminPayLoad{
     id: string;
     email: string;
     role: string;

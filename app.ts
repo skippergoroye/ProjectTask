@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import { sequelizeDB } from "./Database/index"
 import indexRouter from './routes/Index'
 import userRouter from './routes/User'
+import adminRouter from './routes/Admin'
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -28,7 +29,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/',  indexRouter)
 app.use('/users', userRouter)
-// app.use('/admins', adminRouter)
+app.use('/admins', adminRouter)
 
 
 
